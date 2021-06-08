@@ -1,20 +1,44 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import {useForm} from '../../hooks/useForm';
+import {useDispatch, useSelector} from 'react-redux';
+import { startGoogleLogin, startLoginEmailPassword } from '../../actions/auth';
 
 export const LoginScreen = () => {
+
+    const dispatch = useDispatch();
+    const {loading} = useSelector(state => state.ui);
+    const [formValues, handleInputChange] = useForm({
+        email: 'nando@gmail.com',
+        password: '123456'
+    });
+
+    const {email, password} = formValues;
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        dispatch(startLoginEmailPassword(email, password));
+    }
+
+    const handleGoogleLogin = () => {
+        dispatch(startGoogleLogin());
+    }
+
     return (
         <div>
             <h3 className="auth__title">Login</h3>
-            <form>
-                <input className="auth__input" autoComplete="off" type="text" placeholder="Email" name="email" />
-                <input className="auth__input" type="password" placeholder="Password" name="password" />
-                <button className="btn btn-primary btn-block" type="submit" >
+            <form onSubmit={handleLogin}>
+                <input className="auth__input" autoComplete="off" type="text" placeholder="Email" name="email" value={email} onChange={handleInputChange} />
+                <input className="auth__input" type="password" placeholder="Password" name="password" value={password} onChange={handleInputChange} />
+                <button className="btn btn-primary btn-block" type="submit" disabled={loading} >
+                    {loading && <i className="fas fa-spinner fa-spin mr-1"></i>}
                     Login
                </button>
                 <div className="auth__social-networks">
                     <p>Login with social networks</p>
                     <div
                         className="google-btn"
+                        onClick={handleGoogleLogin}
                     >
                         <div className="google-icon-wrapper">
                             <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="google button" />

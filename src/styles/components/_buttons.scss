@@ -18,6 +18,9 @@
         border-radius: 2px;
         &:disabled {
             background-color: lighten($color: $primary, $amount: 15);
+            &:hover {
+                background-color: lighten($color: $primary, $amount: 15);
+            }
         }
         &:hover {
             background-color: darken($color: $primary, $amount: 20);
